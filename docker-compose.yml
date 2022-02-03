@@ -1,0 +1,54 @@
+version: '3.8'
+services:
+  go:
+    build:
+      context: './go'
+      args:
+        - GO_VERSION=${GO_VERSION}
+    networks:
+      - backend
+    ports:
+      - '8080:8080'
+    volumes:
+      - ${PROJECT_ROOT}/:/var/www/html/
+    container_name: go
+  php:
+    build:
+      context: './php'
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+    networks:
+      - backend
+    volumes:
+      - ${PROJECT_ROOT}/:/var/www/html/
+    container_name: php
+  apache:
+    build:
+      context: './apache/'
+      args:
+        - APACHE_VERSION=${APACHE_VERSION}
+    networks:
+      - backend
+      - frontend
+    depends_on:
+      - go
+      - php
+    ports:
+      - '8081:80'
+    volumes:
+      - ${PROJECT_ROOT}/:/var/www/html/
+    container_name: apache
+networks:
+  backend:
+  frontend:
+
+  #golang:
+  #  build:
+  #    context: './golang'
+  #    args:
+  #      - GO_VERSION=${GO_VERSION}
+  #  networks:
+  #    - backend
+  #  volumes:
+  #    - ${PROJECT_ROOT}/:/var/www/html/
+  #  container_name: golang

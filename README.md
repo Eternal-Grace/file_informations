@@ -1,2 +1,2 @@
 # File-Informations
-「File Information」 - 'Go' Project 
+「File Information」 - 'Go 1.17' Project 
